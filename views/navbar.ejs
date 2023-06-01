@@ -4,8 +4,14 @@
       <a class="navbar-brand" href="/">The New IMDB</a>
     </div>
     <ul class="nav navbar-nav navbar-middle">
+      <% if(user == null ){ %>
       <li class="nav-item"><a class="nav-link" href="/login">Login with GitHub</a></li>
       <li class="nav-item"><a class="nav-link" href="/favorites">Favorites</a></li>
+      <% }else{ %>
+        <form action="/logout" method="post">
+        <li class="nav-item"><a class="nav-link btn btn-success" type="submit">Logout</a></li>
+        </form>
+      <% } %>
     </ul>
     <!-- <ul class="nav navbar-nav navbar-right"> -->
           <form action="/search?source=hp" method="post" id="search-form" class="nav navbar-form navbar-right">

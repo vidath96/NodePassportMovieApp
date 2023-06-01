@@ -5,6 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 const helmet = require('helmet')
+//-----------PASSPORT FILES-----------//
+const session = require('express-session')
+const passport = require('passport')
+const GitHubStrategy = require('passport-github').Strategy
+
+// GitHub Client ID 8732ec03a3dc68b9578c
+// GitHub Client Secret fe98eea4009895f6a6b9fff8e050362303d88361
 
 var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
@@ -14,6 +21,37 @@ var app = express();
 app.use(helmet({
     contentSecurityPolicy: false,
 }));
+
+//------------- Passport GitHub Strategy Config-------------//
+app.use(session({
+  secret: 'My Movie App Session',
+  resave: false,
+  saveUninitialized: true,
+  // cookie: { secure: true }
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+const githubConfig = require('./gitconfig')
+passport.use(new GitHubStrategy(githubConfig,
+function(accessToken, refreshToken, profile, cb) {
+  // console.log(profile)
+  return cb(null, profile);
+}
+));
+
+passport.serializeUser(function(user, cb) {
+  // process.nextTick(function() {
+    cb(null,user);
+  // });
+});
+
+passport.deserializeUser(function(user, cb) {
+  // process.nextTick(function() {
+    cb(null,user);
+  // });
+});
+
+//----------------------------------------------------------//
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
